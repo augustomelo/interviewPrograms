@@ -1,0 +1,25 @@
+{
+  "name": "lojaweb",
+  "description": "",
+  "main": "index.html",
+  "authors": [
+    "Augusto Melo"
+  ],
+  "license": "",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "angular-ui-router": "^0.2.18",
+    "angular": "^1.5.0",
+    "angular-md5": "^0.1.10",
+    "angular-cookies": "^1.5.0"
+  }
+}

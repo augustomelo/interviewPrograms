@@ -1,0 +1,38 @@
+﻿@model SistemaRestaurante.Models.Restaurante
+@{
+    ViewBag.Title = "Cadastro de Restaurante";
+}
+
+<div style="margin: 5% 0">
+    <h3 class="toUpperCase">@ViewBag.Title</h3>
+</div>
+<div>
+    <form action="/Restaurante/SalvaRestaurante" method="post" role="form">
+        <fieldset>
+            <legend>Dados</legend>
+            @if (Model != null && Model.RestauranteID > 0) 
+            {
+                <div class="form-group">
+                    @Html.HiddenFor(model => model.RestauranteID)
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Nome do restaurante: </label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="@Model.Nome" data-val="true" data-val-required="O restaurante precisa de um nome.">
+                    <span class="field-validation-valid" data-valmsg-for="nome" data-valmsg-replace="true"></span>
+                </div>
+            }
+            else 
+            {
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Nome do restaurante: </label>
+                    <input type="text" class="form-control" id="nome" name="nome" data-val="true" data-val-required="O restaurante precisa de um nome.">
+                    <span class="field-validation-valid" data-valmsg-for="nome" data-valmsg-replace="true"></span>
+                </div>
+            }
+            
+            <a href="/Home/Restaurantes" class="btn btn-danger"> <i class="glyphicon glyphicon-remove"></i>Cancelar</a>
+            <button type="submit" class="btn btn-success"> <i class="glyphicon glyphicon-floppy-disk"></i>Salvar</button>
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SistemaRestaurante.Models.Prato>
+
+@{
+    ViewBag.Title = "Pratos";
+}
+
+<div style="margin: 5% 0">
+    <h3 class="toUpperCase" >@ViewBag.Title</h3>
+</div>
+<div>
+    <div style="margin: 5% 0">
+        <a href="/Prato" class="btn btn-success"> <i class="glyphicon glyphicon-plus"></i> Cadastrar novo Prato</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-1"></th>
+                <th class="col-md-1"></th>
+                <th class="col-md-4">Restaurante</th>
+                <th class="col-md-3">Prato</th>
+                <th class="col-md-1">Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        <a href="@Url.Action("DeleteRestaurante", "Prato", new { id=item.PratoID})">
+                            <i class="glyphicon glyphicon-minus" style="color: red"> </i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="@Url.Action("Index", "Prato", new { id=item.PratoID, nome=item.Restaurante.Nome })">
+                            <i class="glyphicon glyphicon-pencil" style="color: blue"> </i>
+                        </a>
+                    </th>
+                    <th>@Html.DisplayFor(model => item.Restaurante.Nome)</th>
+                    <th>@Html.DisplayFor(model => item.Nome)</th>
+                    <th>@Html.DisplayFor(model => item.Preco)</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

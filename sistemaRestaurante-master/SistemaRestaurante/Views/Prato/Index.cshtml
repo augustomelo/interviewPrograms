@@ -1,0 +1,68 @@
+﻿@model SistemaRestaurante.Models.Prato
+@{
+    ViewBag.Title = "Cadastro de Prato";
+}
+
+<div style="margin: 5% 0">
+    <h3 class="toUpperCase" >@ViewBag.Title</h3>
+</div>
+<div>
+    <form  action="/Prato/SalvaPrato" method="post" role="form" id="pratos">
+        <fieldset>
+            <legend>Dados</legend>
+            @if (Model != null && Model.PratoID > 0)
+            {
+                <div class="form-group">
+                    @Html.HiddenFor(model => model.PratoID)
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Nome do restaurante: </label>
+                    <select class="form-control" id="restaurantes" name="RestauranteID">
+                        <option id="RestauranteID" value="@Model.RestauranteID"> @Model.Restaurante.Nome </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Prato:</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="@Model.Nome" data-val="true" data-val-required="O prato precisa de um nome.">
+                    <span class="field-validation-valid" data-valmsg-for="nome" data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Preço:</label>
+                    <input type="text" class="form-control" id="preco" name="preco" value="@Model.Preco" data-val="true" data-val-required="O prato precisa de um preço." >
+                    <span class="field-validation-valid" data-valmsg-for="preco" data-valmsg-replace="true"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Nome do restaurante: </label>
+                    <select class="form-control" id="restaurantes" name="RestauranteID"></select>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Prato:</label>
+                    <input type="text" class="form-control" id="nome" name="nome" data-val="true" data-val-required="O prato precisa de um nome.">
+                    <span class="field-validation-valid" data-valmsg-for="nome" data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Preço(R$):</label>
+                    <input class="form-control" type="number" min="0" step="0.01" id="preco" name="preco" data-val="true" data-val-required="O prato precisa de um preço." />
+                    <span class="field-validation-valid" data-valmsg-for="preco" data-valmsg-replace="true"></span>
+                </div>
+
+            }
+
+            <a href="/Home/Pratos" class="btn btn-danger"> <i class="glyphicon glyphicon-remove"></i>Cancelar</a>
+            <button type="submit" class="btn btn-success"> <i class="glyphicon glyphicon-floppy-disk"></i>Salvar</button>
+        </fieldset>
+    </form>         
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/Custom/pratos.js"></script>
+}

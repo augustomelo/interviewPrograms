@@ -1,0 +1,51 @@
+﻿@model IEnumerable<SistemaRestaurante.Models.Restaurante>
+
+@{
+    ViewBag.Title = "Restaurantes";
+}
+<div style="margin: 5% 0">
+    <h3 class="toUpperCase" >@ViewBag.Title</h3>
+</div>
+<div>
+    <div style="margin: 5% 0">
+        <form action="/Restaurante/FiltraRestaurante" method="post" role="form">
+            <fieldset>
+                <legend>Filtros</legend>
+                <div class="form-group">
+                    <label style="font-weight: normal" for="nome">Nome: </label>
+                    <input type="text" class="form-control" id="nome" name="nome">
+                </div>
+
+                <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-search"></i> Pesquisar</button>
+                <a href="/Restaurante" class="btn btn-success"> <i class="glyphicon glyphicon-plus"></i> Cadastrar novo Restaurante</a>
+            </fieldset>
+        </form>
+    </div>
+    <table class="table table-striped"> 
+        <thead> 
+            <tr> 
+                <th class="col-md-1"></th> 
+                <th class="col-md-1"></th> 
+                <th class="col-md-8">Restaurante</th> 
+            </tr> 
+        </thead> 
+        <tbody> 
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        <a href="@Url.Action("DeleteRestaurante", "Restaurante", new { id=item.RestauranteID })">
+                            <i class="glyphicon glyphicon-minus" style="color: red"> </i>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="@Url.Action("Index", "Restaurante", new { id=item.RestauranteID })">
+                            <i class="glyphicon glyphicon-pencil" style="color: blue"> </i>
+                        </a>
+                    </th>
+                    <th>@Html.DisplayFor(model => item.Nome)</th>
+                </tr>
+            }
+       </tbody>
+    </table>
+</div>

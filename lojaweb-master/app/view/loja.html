@@ -1,0 +1,53 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+			</button>
+			<a class="navbar-brand" href="#/loja">Lojas</a>
+		</div>
+
+		<ul class="nav navbar-nav navbar-right">
+            <li ng-click="logout()"><a href="./">Log out <span class="sr-only"></span></a></li>
+          </ul>
+	</div>
+</nav>
+
+<div style="margin-top: 20px" class="container">
+	<div style="border-bottom: 0;" class="page-header">
+		<h1>Listagem lojas</h1>
+	</div>
+
+	<table class="table">
+		<tbody>
+		<tr style="font-weight: bold">
+			<td style="width: 10%">ID</td>
+			<td style="width: 75%">Nome</td>
+			<td style="width: 15%">Editar</td>
+		</tr>
+		<tr ng-repeat="loja in lojas">
+			<td>
+				<div style="width: 100%" ng-hide="edicao[loja.index]">{{ loja.id }}</div>
+				<div ng-show="edicao[loja.index]"> {{loja.id}}</div>
+			</td>
+			<td>
+				<div ng-hide="edicao[loja.index]">{{loja.nome}}</div>
+				<div ng-show="edicao[loja.index]"> <input class="form-control" type="text" ng-model="lojas[$index].nome" name="nome"/> 
+				</div>
+			</td>
+			<td style="white-space: nowrap">
+				<button class="btn btn-sm btn-primary" ng-click="modifica(loja, $index)">
+					<em ng-if="!edicao[loja.index]" class="glyphicon glyphicon-pencil"></em>
+					<em ng-if="edicao[loja.index]" class="glyphicon glyphicon-floppy-disk"></em>
+				</button>
+
+				<button class="btn btn-sm btn-danger" ng-click="deleta(loja, $index)"><em class="glyphicon glyphicon-trash"></em></button>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+
+	<div style="float: right; margin-right: 6.4%;">
+		<button ng-click="adicionarVal()" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button>
+	</div>
+</div>
