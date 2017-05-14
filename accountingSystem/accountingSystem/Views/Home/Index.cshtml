@@ -1,7 +1,224 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Contas a Receber";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <h2>Blank project</h2>
+<div>
+    <h2>@ViewData["Title"]</h2>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Filtros</h3>
+            <hr />
+
+            <form class="form-inline" action="/Home/Index" method="get">
+                <div class="row">
+                    <div class="col-md-12" style="padding-right: 0;">
+                        <div class="form-group col-md-10" style="width: 80%">
+                            <input type="text" name="description" class="form-control"
+                                   style=" max-width: 100%; width: 100%;"
+                                   data-toggle="tooltip" data-placement="top"
+                                   title="Digite a descrição que deseja procurar">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="submit" class="btn btn-primary pull-right">
+                                <i class="glyphicon glyphicon-search"></i>
+                                Pesquisar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br />
+
+    @if (((List<accountingSystem.Models.AccountsReceivable>)ViewData["AccReceiv"]).Count > 0)
+            {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td class="col-md-3">Description</td>
+                    <td class="col-md-2">Emission</td>
+                    <td class="col-md-2">Due</td>
+                    <td class="col-md-2">Value</td>
+                    <td class="col-md-1"></td>
+                    <td class="col-md-1"></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewData["AccReceiv"] as List<accountingSystem.Models.AccountsReceivable>)
+                {
+                    <tr>
+                        <td>@item.Description</td>
+                        <td>@item.Emission.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Due.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Price</td>
+                        <td>
+                            <a href="@Url.Action("Liquidate", "Home", new { id=item.ID })">
+                                <i class="glyphicon glyphicon-check" style="color: #337ab7; cursor: pointer"
+                                   data-toggle="tooltip" data-placement="top" title="Liquidar conta"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a>
+                                <i class="glyphicon glyphicon-edit" onclick="getData(@item.ID)" style="color: #5cb85c; cursor: pointer"
+                                   data-toggle="tooltip" data-placement="top" title="Editar conta">
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3>Nenhum registro encontrado</h3>
+        <hr />
+    }
+
+    <div class="row">
+        <div class="col-sm-8" style="padding-top: 6px">
+            <span>Contas ativas: <b id="activeAcc">@ViewData["ActiveAcc"]</b></span>
+        </div>
+
+        <div class="col-sm-4">
+            <button id="modal-insert" type="button" class="btn btn-success pull-right"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="glyphicon glyphicon-plus"></i>
+                Cadastrar
+            </button>
+        </div>
+    </div>
 </div>
+
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+            </div>
+            <form action="/Home/Persist" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                                <label>Código</label>
+                                <input type="number" id="id" name="ID" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label>Descrição</label>
+                                <input style="max-width: 100%;" type="text" id="description"  name="Description" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                                <label>Data Emissão</label>
+                                <input type="date" id="emission" name="Emission" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Data Vencimento</label>
+                                <input type="date" id="due" name="Due" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                                <label>CPF Cliente</label>
+                                <input type="text" id="cpf" name="CPF" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Nome Cliente</label>
+                                <input type="text" id="userName" name="UserName" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-6">
+                                <label>Telefone Cliente</label>
+                                <input type="text" id="userPhone" name="UserPhone" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Email Cliente</label>
+                                <input type="text" id="userEmail" name="UserEmail" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                                <label>Desconto (R$)</label>
+                                <input type="number" id="discount" name="Discount" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Acrésc. (R$)</label>
+                                <input type="number" id="addition" name="Addition" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Valor Pago</label>
+                                <input type="number" id="payed" name="Payed" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Valor</label>
+                                <input type="number" id="price" name="Price" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i>Fechar</button>
+                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        setInterval(function () {
+            getMethod("Home/GetActiveAccounts", null, function (data) {
+                $("#activeAcc").html(data);
+            })
+        }, 60 * 1000);
+
+        $("#modal-insert").click(function () {
+            $("#modalTitle").html("Cadastrar Contas a Receber");
+            $("#accountModal").modal("show");
+        })
+
+        function getData(data)
+        {
+            postMethod("Home/GetAccountable", data, function (data) {
+                $("#addition").val(data.addition);
+                $("#description").val(data.description);
+                $("#discount").val(data.discount);
+                $("#due").val(new Date(data.due).toISOString().substring(0, 10));
+                $("#emission").val(new Date(data.emission).toISOString().substring(0, 10));
+                $("#id").val(data.id);
+                $("#liquidated").val(data.liquidated);
+                $("#payed").val(data.payed);
+                $("#price").val(data.price);
+                $("#cpf").val(data.cpf);
+                $("#userName").val(data.userName);
+                $("#userEmail").val(data.userEmail);
+                $("#userPhone").val(data.userPhone);
+
+                $("#modalTitle").html("Editar Contas a Receber");
+                $("#accountModal").modal("show");
+            })
+        }
+    </script>
+}

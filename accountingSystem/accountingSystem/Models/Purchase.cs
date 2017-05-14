@@ -16,11 +16,6 @@ namespace accountingSystem.Models
         public int ID { get; set; }
 
         /// <summary>
-        /// Item that was purchased.
-        /// </summary>
-        public Item Item { get; set; }
-
-        /// <summary>
         /// Quantity of items that were celled.
         /// </summary>
         public int Quantity { get; set; }
@@ -32,8 +27,18 @@ namespace accountingSystem.Models
         {
             get
             {
-                return Quantity * Item.Price;
+                return Quantity * Price;
             }
         }
+
+        /// <summary>
+        /// Name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Price.
+        /// </summary>
+        public float Price { get; set; }
     }
 }
