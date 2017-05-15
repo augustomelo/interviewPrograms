@@ -8,7 +8,7 @@ using accountingSystem.DAL;
 namespace accountingSystem.Migrations
 {
     [DbContext(typeof(AccountsReceivableContext))]
-    [Migration("20170514223752_InitialCreate")]
+    [Migration("20170514235539_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

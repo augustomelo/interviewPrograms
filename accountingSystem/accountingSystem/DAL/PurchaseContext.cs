@@ -24,7 +24,7 @@ namespace accountingSystem.DAL
         /// <summary>
         /// Class constructor.
         /// </summary>
-        private PurchaseContext(DbContextOptions<PurchaseContext> options) : base(options)
+        public PurchaseContext(DbContextOptions<PurchaseContext> options) : base(options)
         {
 
         }

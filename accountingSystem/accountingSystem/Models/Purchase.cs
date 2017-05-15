@@ -40,5 +40,15 @@ namespace accountingSystem.Models
         /// Price.
         /// </summary>
         public float Price { get; set; }
+
+        /// <summary>
+        /// Define if the purschase was cancelled.
+        /// </summary>
+        public bool Cancelled { get; set; }
+
+        /// <summary>
+        /// Item name.
+        /// </summary>
+        public string ItemName { get; set; }
     }
 }

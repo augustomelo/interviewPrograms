@@ -9,7 +9,7 @@ namespace accountingSystem.Controllers
     public class HomeController : Controller
     {
         /// <summary>
-        /// Acccounts receivable context.
+        /// Acccounts receivable controller.
         /// </summary>
         private readonly AccountsReceivableContext _context;
 
@@ -98,8 +98,7 @@ namespace accountingSystem.Controllers
         public ActionResult Liquidate(int id)
         {
             var data = _context.AccountsReceivable.FirstOrDefault(entry => entry.ID == id);
-            //accountsReceivable.Payed = accountsReceivable.Price;
-            data.Price = data.Payed;
+            data.Payed = data.Price;
 
             _context.Entry(data).State = EntityState.Modified;
             _context.SaveChanges();

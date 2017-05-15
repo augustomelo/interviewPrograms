@@ -1,0 +1,181 @@
+@{
+    ViewData["Title"] = "Compras";
+}
+
+<div>
+    <h2>@ViewData["Title"]</h2>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Filtros</h3>
+            <hr />
+
+            <form class="form-inline" action="/Purchases/Index" method="get">
+                <div class="row">
+                    <div class="col-md-12" style="padding-right: 0;">
+                        <div class="form-group col-md-10" style="width: 80%">
+                            <input type="text" name="purchaseName" class="form-control"
+                                   style=" max-width: 100%; width: 100%;"
+                                   data-toggle="tooltip" data-placement="top"
+                                   title="Digite o nome da compra que deseja procurar">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button type="submit" class="btn btn-primary pull-right">
+                                <i class="glyphicon glyphicon-search"></i>
+                                Pesquisar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br />
+
+    @if (((List<accountingSystem.Models.Purchase>)ViewData["Purchases"]).Count > 0)
+            {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td class="col-md-5">Nome</td>
+                    <td class="col-md-3">Quantidade</td>
+                    <td class="col-md-2">Valor Total</td>
+                    <td class="col-md-1"></td>
+                    <td class="col-md-1"></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewData["Purchases"] as List<accountingSystem.Models.Purchase>)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.TotalAmount</td>
+                        <td>
+                            <a href="@Url.Action("Cancell", "Purchases", new { id=item.ID })">
+                                <i class="glyphicon glyphicon-check" style="color: #d9534f; cursor: pointer"
+                                   data-toggle="tooltip" data-placement="top" title="Cancelar"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a>
+                                <i class="glyphicon glyphicon-edit" onclick="getData(@item.ID)" style="color: #5cb85c; cursor: pointer"
+                                   data-toggle="tooltip" data-placement="top" title="Editar conta">
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3>Nenhum registro encontrado</h3>
+        <hr />
+    }
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="modal-insert" type="button" class="btn btn-success pull-right"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="glyphicon glyphicon-plus"></i>
+                Cadastrar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+            </div>
+            <form action="/Purchases/Persist" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                                <label>Código</label>
+                                <input type="number" id="id" name="ID" class="form-control" readonly>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label>Nome</label>
+                                <input style="max-width: 100%;" type="text" id="name" name="Name" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-12">
+                                <label>Nome Item</label>
+                                <input  style="max-width: 100%;" type="text" id="itemName" name="ItemName" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-3">
+                                <label>Quantidade</label>
+                                <input type="number" id="quantity" name="Quantity" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Preço</label>
+                                <input type="number" id="price" name="Price" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Cancelado</label>
+                                <input type="text" id="cancelled" class="form-control" disabled>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Valor total</label>
+                                <input type="text" id="totalAmount" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i>Fechar</button>
+                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i>Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#modal-insert").click(function () {
+            $("#modalTitle").html("Cadastrar Compras");
+            $("#purchaseModal").modal("show");
+        })
+
+        function getData(data)
+        {
+            postMethod("Purchases/GerPurchase", data, function (data) {
+                $("#id").val(data.id);
+                $("#name").val(data.name);
+                $("#price").val(data.price);
+                $("#totalAmount").val(data.totalAmount);
+                $("#quantity").val(data.quantity);
+                $("#itemName").val(data.itemName);
+
+                if (data.cancelled)
+                    $("#cancelled").val("Sim");
+                else
+                    $("#cancelled").val("Não");
+
+                $("#modalTitle").html("Editar Compras");
+                $("#purchaseModal").modal("show");
+            })
+        }
+    </script>
+}
