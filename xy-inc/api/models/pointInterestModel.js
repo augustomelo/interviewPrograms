@@ -1,25 +1,36 @@
 'use strict';
+
+function validateSize(value) {
+    return !(value.length > 2);
+}
+
+function validateType(value) {
+    for(var i = 0; i < value.length; i++) {
+        if (!Number.isInteger(value[i]) || (value[i] < 0))
+            return false;
+    }
+
+    return true;
+}
+
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
+var validators = [
+    { validator: validateSize, msg: "Only two coordinates are allowed!"},
+    { validator: validateType, msg: "Only positive and integer values are allowed as coordinates!"}
+];
 
 var PointInterestSchema = new Schema({
     name: {
         type: String,
-        Required: "Enter the Point of interest name"
+        required: [true, "Enter the Point of interest name"]
     },
-    x-coordinate: {
-        type: Number,
-        min:0,
-        get: value => Math.round(value),
-        set: value => Math.round(value)
-    },
-    y-coordinate: {
-        type: Number,
-        min:0,
-        get: value => Math.round(value),
-        set: value => Math.round(value)
+    loc: {
+        type: [Number],
+        index: '2d',
+        required: [true, "Enter x and y coordinate"],
+        validate: validators
     }
 });
 
-
-module.exports = mongoose.model('PointInterest', PointInterestSchema)
+module.exports = mongoose.model('PointInterest', PointInterestSchema);
