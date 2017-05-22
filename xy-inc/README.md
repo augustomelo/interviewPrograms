@@ -12,7 +12,7 @@ O banco de dados utilizado foi o mongoDB utilizando o serviço do mongolab
   no body:
     ```
     {
-        "name": Lanchonete,
+        "name": "Lanchonete",
         "loc": [27, 12]
     }
     ```
